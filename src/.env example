@@ -1,0 +1,6 @@
+APP_NAME = "Essay Scoring System"
+APP_VERSION = "0.1" 
+DF_PATH = "../data/raw/df.csv"
+TRAIN_PATH = "../data/raw/train.csv"
+TEST_PATH = "../data/raw/test.csv"
+TEST_SIZE = 1500
