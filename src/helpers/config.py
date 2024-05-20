@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     TRAIN_PATH: str
     TEST_PATH: str
     TEST_SIZE: int
+    QWK_A: float
+    QWK_B: float
+    N_SPLITS: int
     class Config:
         env_file = ".env"
 
