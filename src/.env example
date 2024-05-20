@@ -5,3 +5,6 @@ DF_PATH = "../data/raw/df.csv"
 TRAIN_PATH = "../data/raw/train.csv"
 TEST_PATH = "../data/raw/test.csv"
 TEST_SIZE = 1500
+QWK_A = 2.948
+QWK_B = 1.092
+N_SPLITS = 10
