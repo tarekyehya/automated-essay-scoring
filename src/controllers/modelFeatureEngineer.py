@@ -9,6 +9,8 @@ from sklearn.model_selection import StratifiedKFold
 import matplotlib.pyplot as plt
 from lightgbm import LGBMRegressor
 from lightgbm import log_evaluation, early_stopping
+import os
+import dill
 
 from helpers import get_settings
 config = get_settings()
@@ -19,7 +21,10 @@ class EssayScorerClassic:
     def __init__(self):
         self.model = None
         self.vectorizer = None
-        self.models_with_tfidf = None
+       # self.models_with_tfidf = None
+        self.__fitted_vec_model = {}
+
+    
 
     def create_vectorizer(self):
         self.vectorizer = TfidfVectorizer(
@@ -91,7 +96,7 @@ class EssayScorerClassic:
         skf = StratifiedKFold(n_splits=config.N_SPLITS, shuffle=True, random_state=0)
         f1_scores = []
         kappa_scores = []
-        models_with_tfidf = []
+       # models_with_tfidf = []
         predictions = []
         callbacks = [log_evaluation(period=25), early_stopping(stopping_rounds=75, first_metric_only=True)]
 
@@ -111,7 +116,7 @@ class EssayScorerClassic:
                 callbacks=callbacks
             )
 
-            models_with_tfidf.append((self.column_transformer, predictor))
+            self.__fitted_vec_model[f'model_{i}'] = [self.column_transformer, predictor]
 
             predictions_fold = predictor.predict(X_test_fold) + config.QWK_A
             predictions_fold = predictions_fold.clip(1, 6).round()
@@ -136,18 +141,16 @@ class EssayScorerClassic:
         print(f'Mean F1 score across 15 folds: {mean_f1_score}')
         print(f'Mean Cohen kappa score across 15 folds: {mean_kappa_score}')
 
-        self.models_with_tfidf = models_with_tfidf
-
-        return models_with_tfidf
+        return self
 
     def predict(self, test_feats):
         probabilities = []
 
-        if self.models_with_tfidf == None:
+        if self.__fitted_vec_model == {}:
             print('no fitted models yet')
             return None
 
-        for pipe in self.models_with_tfidf:
+        for key, pipe in self.__fitted_vec_model.items():
             test_transformed = pipe[0].transform(test_feats)
             proba = pipe[1].predict(test_transformed) + config.QWK_A
             probabilities.append(proba)
@@ -155,3 +158,23 @@ class EssayScorerClassic:
         predictions = np.mean(probabilities, axis=0)
         predictions = np.round(predictions.clip(1, 6))
         return predictions
+    
+    def save_models(self):
+        if self.__fitted_vec_model == {}:
+            print('no fitted models yet')
+            return None
+        
+        if os.path.exists(config.MODELS_CLASSIC_PATH):
+            print('the models will be overwrited')
+        
+        # Save the dictionary
+              # Save the dictionary
+        with open(config.MODELS_CLASSIC_PATH, 'wb') as file:
+            dill.dump(self.__fitted_vec_model, file)
+        print(f"Models dictionary saved at: {config.MODELS_CLASSIC_PATH}")
+
+    #@staticmethod
+    def pass_models_classic(self,models: dict):
+        self.__fitted_vec_model = models
+        return self
+    
