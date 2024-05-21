@@ -5,17 +5,15 @@ config = get_settings()
 
 class DataController:
 
-    def __init__(self):
-        super().__init__()
-        self.label_column = 'score'
-
     # if needed
-    def make_test_set_skf_out(self,df, part_size = config.TEST_SIZE):
+    @staticmethod
+    def make_test_set_skf_out(part_size = config.TEST_SIZE):
         # Initialize StratifiedKFold with 1 split (for taking one part)
+        df = pd.read_csv(config.DF_PATH)
         skf = StratifiedKFold(n_splits=int(len(df) / part_size))
     
         # Get the indices for the first fold
-        for _, test_index in skf.split(df, df[self.label_column]):
+        for _, test_index in skf.split(df, df['score']):
             part_indices = test_index
             break
     
@@ -24,6 +22,10 @@ class DataController:
     
         # Drop the selected part from the original DataFrame
         train = df.drop(part_indices)
-    
+
+        # Save data 
+        train.to_csv(config.TRAIN_PATH, index=False)
+        test.to_csv(config.TEST_PATH, index=False)
+
         return test, train
     

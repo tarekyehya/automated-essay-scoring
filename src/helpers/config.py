@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     QWK_A: float
     QWK_B: float
     N_SPLITS: int
+    MODELS_CLASSIC_PATH: str
     class Config:
         env_file = ".env"
 
