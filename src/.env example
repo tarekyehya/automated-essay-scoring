@@ -4,7 +4,9 @@ RAW_PATH = "../data/raw/"
 DF_PATH = "../data/raw/df.csv"
 TRAIN_PATH = "../data/raw/train.csv"
 TEST_PATH = "../data/raw/test.csv"
-TEST_SIZE = 1500
+TEST_SIZE = 1000
 QWK_A = 2.948
 QWK_B = 1.092
 N_SPLITS = 10
+MODELS_CLASSIC_PATH = '../models/classic/models_dict.pkl'
+
