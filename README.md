@@ -1,7 +1,19 @@
-#  Automated Essay Scoring repo
+#  Automated Essay Scoring System
 ==============================
 
-This repository contains code and resources for a Kaggle competition focused on training a model to score student essays automatically. The goal is to reduce grading time and costs, enabling essays to be included in testing, a crucial measure of student learning often avoided due to grading challenges.
+
+## Description
+
+1. technical problem: automate the evaluating phase in essay questions.  
+2. buissnes challenge: The goal is to reduce grading time and costs, enabling essays to be included in testing, a crucial measure of student learning often avoided due to grading challenges.
+
+3. i have third approaches:
+    - using a classical models with some heavey and smart feature engineering ( Done )
+
+    - using LLMs, fine-tune in the dataset and some expermentations in the best and cost, tests in things like LoRa or full or some specific layers to be fine-tuned for fine-tune, like how to trate the problem in a classification way with 6 labels or regression task, and more ( working on it )
+
+    - useing the feature from the first approache and using a LLM as a feature extraction then pass all to classic model ( i had made a notebook as a prove of concept )  
+
 
 ## requirements
 
@@ -37,4 +49,8 @@ $ pip install -r requirements.txt
 ```bash
 $ cp .env.example .env
 ```
+
+### Note:
+    all notebooks was tested, runned and experimented in Kaggle.
+
 
